@@ -13,11 +13,27 @@ password = "123"
 facebook_friends=["Loai","Kenda","Avigail", "George", "Fouad", "Gi"]
 
 
-@app.route('/')  # '/' for the default page
+@app.route('/',methods=['GET', 'POST'])  # '/' for the default page
 def login():
-  return render_template('login.html')
-  
+		if request.method == 'GET':
+			return render_template('login.html')
 
+		else :
+			if request.form['username']==username and request.form['password']==password:
+				return redirect(url_for('home'))
+  
+@app.route('/home')
+def home():
+	return render_template('home.html',friends = facebook_friends)
+
+
+@app.route('/friend_exists/<string:name>',methods=['GET', 'POST'])
+def friend_exists(name):
+	check = False
+	if name in facebook_friends :
+		check = True
+	return render_template('friend_exists.html',in_it = check,n = name)
+	
 
 
 if __name__ == "__main__":  # Makes sure this is the main process
