@@ -8,11 +8,13 @@ app = Flask(  # Create a flask app
 )
 
 
-username = "siwarha"
-password = "123"
+
 facebook_friends=["Loai","Kenda","Avigail", "George", "Fouad", "Gi"]
 users = {"said":"said123","yahli":"321","yazan":"damn","guy":"very_magical"}
-
+userFriends = {"said":["a","b","c", "d", "e", "f"],
+"yahli":["f","h","no", "yes", "mabye", "sure"],
+"yazan":["me","him","her", "they", "no", "zero"],
+"guy":["wow","ahmad","rami", "no friends", "empty", "for run"]}
 @app.route('/',methods=['GET', 'POST'])  # '/' for the default page
 def login():
 		if request.method == 'GET':
@@ -20,13 +22,13 @@ def login():
 
 		else :
 			if request.form['username'].lower() in users and request.form['password']==users[request.form['username'].lower()]:
-				return redirect(url_for('home'))
+				return redirect(url_for('home', name = request.form['username']))
 			else :
 				return render_template('login.html')
   
-@app.route('/home')
-def home():
-	return render_template('home.html',friends = facebook_friends)
+@app.route('/home/<string:name>')
+def home(name):
+	return render_template('home.html',friends = facebook_friends,userFr = userFriends, user = name)
 
 
 @app.route('/friend_exists/<string:name>',methods=['GET', 'POST'])
